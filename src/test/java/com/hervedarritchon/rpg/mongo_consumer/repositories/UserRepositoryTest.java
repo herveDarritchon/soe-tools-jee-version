@@ -1,8 +1,6 @@
 package com.hervedarritchon.rpg.mongo_consumer.repositories;
 
 import com.hervedarritchon.rpg.mongo_consumer.domain.User;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -11,13 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -29,19 +25,18 @@ import static org.junit.Assert.assertThat;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:**/application-context.xml"})
+@ContextConfiguration(locations = {"/applicationTest-context.xml"})
 public class UserRepositoryTest {
 
     @Autowired
-    UserRepository userRepository;
-
+    UserRepository repository;
     @Autowired
     MongoTemplate mongoTemplate;
 
     @Test
     public void readsFirstPageCorrectly() {
 
-        Page<User> persons = userRepository.findAll(new PageRequest(0, 10));
+        Page<User> persons = repository.findAll(new PageRequest(0, 10));
         assertThat(persons.isFirstPage(), is(true));
     }
 
@@ -49,13 +44,14 @@ public class UserRepositoryTest {
     public void insertAUser() {
         final Logger log = LoggerFactory.getLogger(UserRepositoryTest.class);
 
-        User u= new User();
-        u.setName("Darritchon");
-        u.setAge(43);
+        User u = new User("Throdo", "herve.darritchon@gmail.com", "Password123!");
+        log.info("User created : {}", u.toString());
         mongoTemplate.insert(u);
 
-        User found=mongoTemplate.findById(u.getId(), User.class);
-        log.info("User found : {}",found);
+        log.info("User inserted : {}", u.toString());
+
+        User found = mongoTemplate.findById(u.getId(), User.class);
+        log.info("User found : {}", found.toString());
         assertNotNull(found);
     }
 }
