@@ -34,6 +34,10 @@ public class User {
         this.version="1.0";
     }
 
+    public User() {
+        super();
+    }
+
     public String getEmailAddress() {
         return emailAddress;
     }

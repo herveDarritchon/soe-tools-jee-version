@@ -1,5 +1,6 @@
 package com.hervedarritchon.rpg.services;
 
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ public class SoeApplication extends ResourceConfig {
         log.info("SoeApplication registered.");
         register(RequestContextFilter.class);
         register(UserResource.class);
+        register(JacksonFeature.class); // Add Jackson (JSon parser) to the Application.
         log.debug("All resources registered.");
     }
 }
